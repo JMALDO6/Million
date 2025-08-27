@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Million.Domain", "Million.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Million.Infrastructure", "Million.Infrastructure\Million.Infrastructure.csproj", "{867A90EE-0DDA-40FE-9DF3-031AD2E89A0D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Million.TestUserCreator", "Million.TestUserCreator\Million.TestUserCreator.csproj", "{B66B4926-E780-42DD-AE11-52B6017FA5BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{867A90EE-0DDA-40FE-9DF3-031AD2E89A0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{867A90EE-0DDA-40FE-9DF3-031AD2E89A0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{867A90EE-0DDA-40FE-9DF3-031AD2E89A0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B66B4926-E780-42DD-AE11-52B6017FA5BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B66B4926-E780-42DD-AE11-52B6017FA5BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B66B4926-E780-42DD-AE11-52B6017FA5BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B66B4926-E780-42DD-AE11-52B6017FA5BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
