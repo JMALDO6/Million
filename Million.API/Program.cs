@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Million.API.Middlewares;
 using Million.Domain.Entities;
 using Million.Domain.Settings;
 using Million.Infrastructure.Persistence;
@@ -105,6 +106,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseSerilogRequestLogging();
+app.UseMiddleware<GlobalException>();
+app.UseRouting();
 
 app.UseHttpsRedirection();
 app.UseAuthentication();

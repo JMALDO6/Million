@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Million.Application.Common.Exceptions;
 using Million.Domain.Entities;
 using Million.Domain.Settings;
 using Million.Infrastructure.Security.Jwt;
@@ -42,7 +43,7 @@ namespace Million.API.Controllers
             if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password))
             {
                 _logger.LogWarning("Invalid login attempt for user: {Email}", request.Email);
-                return Unauthorized("Invalid credentials");
+                throw new InvalidCredentialsException();
             }
 
             var roles = await _userManager.GetRolesAsync(user);
