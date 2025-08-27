@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Million.Domain.Entities;
 using Million.Domain.Settings;
 using Million.Infrastructure.Persistence;
+using Serilog;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -87,6 +88,14 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+
+// Configure Serilog
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 var app = builder.Build();
 
