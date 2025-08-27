@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Million.Domain.Entities;
+using Million.Domain.Settings;
 using Million.Infrastructure.Persistence;
-using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +20,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.Configure<JwtSettings>(
+    builder.Configuration.GetSection("JwtSettings"));
 
 var app = builder.Build();
 
