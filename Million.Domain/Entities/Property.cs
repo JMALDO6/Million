@@ -3,7 +3,16 @@
     /// <summary>
     /// Property entity representing a real estate property.
     /// </summary>
-    public class Property
+    /// <remarks>
+    /// Constructor for Property entity.
+    /// </remarks>
+    /// <param name="name"></param>
+    /// <param name="address"></param>
+    /// <param name="price"></param>
+    /// <param name="codeInternal"></param>
+    /// <param name="year"></param>
+    /// <param name="idOwner"></param>
+    public class Property(string name, string address, decimal price, string codeInternal, int year, int idOwner)
     {
         /// <summary>
         /// Id of the property.
@@ -13,37 +22,37 @@
         /// <summary>
         /// Name of the property.
         /// </summary>
-        public required string Name { get; set; }
+        public string Name { get; set; } = name;
 
         /// <summary>
         /// Address of the property.
         /// </summary>
-        public required string Address { get; set; }
+        public string Address { get; set; } = address;
 
         /// <summary>
         /// Price of the property.
         /// </summary>
-        public double Price { get; set; }
+        public decimal Price { get; set; } = price;
 
         /// <summary>
         /// Code internal of the property.
         /// </summary>
-        public required string CodeInternal { get; set; }
+        public string CodeInternal { get; set; } = codeInternal;
 
         /// <summary>
         /// Year the property was built.
         /// </summary>
-        public int Year { get; set; }
+        public int Year { get; set; } = year;
 
         /// <summary>
         /// Id of the owner of the property.
         /// </summary>
-        public int IdOwner { get; set; }
+        public int IdOwner { get; set; } = idOwner;
 
         /// <summary>
         /// Owner of the property.
         /// </summary>
-        public required Owner Owner { get; set; }
+        public Owner Owner { get; set; }
 
         /// <summary>
         /// Related images of the property.

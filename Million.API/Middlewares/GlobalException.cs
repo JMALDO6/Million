@@ -5,6 +5,9 @@ using System.Text.Json;
 
 namespace Million.API.Middlewares
 {
+    /// <summary>
+    /// Global exception handling middleware
+    /// </summary>
     public class GlobalException
     {
         private readonly RequestDelegate _next;
@@ -60,6 +63,29 @@ namespace Million.API.Middlewares
                 context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                 await context.Response.WriteAsync(JsonSerializer.Serialize(new { error = ex.Message }));
             }
+            catch (FluentValidation.ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Error in validation.");
+
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                context.Response.ContentType = "application/json";
+
+                var errors = ex.Errors
+                    .GroupBy(e => e.PropertyName)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.Select(e => e.ErrorMessage).ToArray()
+                    );
+
+                var response = new
+                {
+                    error = "The request has validation errors.",
+                    errors,
+                    traceId = context.TraceIdentifier
+                };
+
+                await context.Response.WriteAsync(JsonSerializer.Serialize(response));
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Unhandled exception occurred while processing request.");
@@ -69,7 +95,7 @@ namespace Million.API.Middlewares
 
                 var response = new
                 {
-                    error = "Ha ocurrido un error inesperado.",
+                    error = "Unhandled exception occurred.",
                     traceId = context.TraceIdentifier
                 };
 

@@ -21,7 +21,8 @@ namespace Million.Infrastructure.Persistence.Configurations
                    .HasMaxLength(100);
 
             builder.Property(o => o.Price)
-                   .IsRequired();
+                   .IsRequired()
+                   .HasColumnType("decimal(18,2)");
 
             builder.Property(o => o.CodeInternal)
                    .IsRequired()

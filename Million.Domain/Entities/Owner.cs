@@ -13,12 +13,12 @@
         /// <summary>
         /// Name of the owner
         /// </summary>
-        public required string Name { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Address of the owner
         /// </summary>
-        public required string Address { get; set; }
+        public string Address { get; set; }
 
         /// <summary>
         /// Photo of the owner
@@ -33,6 +33,6 @@
         /// <summary>
         /// Relationship to the properties owned by this owner
         /// </summary>
-        public required ICollection<Property> Properties { get; set; }
+        public ICollection<Property> Properties { get; set; }
     }
 }

@@ -13,7 +13,7 @@
         /// <summary>
         /// File data of the image.
         /// </summary>
-        public required byte[] File { get; set; }
+        public byte[] File { get; set; }
 
         /// <summary>
         /// Status indicating if the image is enabled.
@@ -28,6 +28,6 @@
         /// <summary>
         /// Reference to the associated Property entity.
         /// </summary>
-        public required Property Property { get; set; }
+        public Property Property { get; set; }
     }
 }

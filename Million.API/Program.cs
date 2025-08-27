@@ -1,12 +1,19 @@
+using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Million.API.Middlewares;
+using Million.Application.Common.Behaviors;
+using Million.Application.Features.Properties.Commands.CreateProperty;
+using Million.Application.Interfaces.Repositories;
 using Million.Domain.Entities;
 using Million.Domain.Settings;
 using Million.Infrastructure.Persistence;
+using Million.Infrastructure.Persistence.Repositories;
 using Serilog;
+using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +27,8 @@ builder.Services.AddSwaggerGen();
 
 // Configure DbContext and Identity
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+    sql => sql.MigrationsAssembly("Million.Infrastructure")));
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
@@ -63,8 +71,8 @@ builder.Services.AddSwaggerGen(c =>
     // Definition Security Scheme
     c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
-        Description = @"JWT Authorization header using the Bearer scheme.  
-                        Enter your token in the text input below.  
+        Description = @"JWT Authorization header using the Bearer scheme.
+                        Enter your token in the text input below.
                         Example: '12345abcdef'",
         Name = "Authorization",
         In = Microsoft.OpenApi.Models.ParameterLocation.Header,
@@ -88,6 +96,11 @@ builder.Services.AddSwaggerGen(c =>
             Array.Empty<string>()
         }
     });
+
+    // Set the comments path for the Swagger JSON and UI.
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
 });
 
 // Configure Serilog
@@ -95,8 +108,17 @@ Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .Enrich.FromLogContext()
     .CreateLogger();
-
 builder.Host.UseSerilog();
+
+// Configure MediatR
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(typeof(CreatePropertyCommand).Assembly));
+
+builder.Services.AddScoped<IPropertyRepository, PropertyRepository>();
+
+builder.Services.AddValidatorsFromAssembly(typeof(CreatePropertyCommandValidator).Assembly);
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+//builder.Services.AddValidatorsFromAssembly(typeof(CreatePropertyDtoValidator).Assembly);
 
 var app = builder.Build();
 

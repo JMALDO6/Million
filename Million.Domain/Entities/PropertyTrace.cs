@@ -18,7 +18,7 @@
         /// <summary>
         /// Name of the property trace
         /// </summary>
-        public required string Name { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Value of the property trace
@@ -38,6 +38,6 @@
         /// <summary>
         /// Property associated with this trace
         /// </summary>
-        public required Property Property { get; set; }
+        public Property Property { get; set; }
     }
 }
