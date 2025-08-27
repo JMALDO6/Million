@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Million.API.Controllers
 {
@@ -18,6 +20,7 @@ namespace Million.API.Controllers
             _logger = logger;
         }
 
+        [Authorize(Roles = "User")]
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
@@ -28,6 +31,17 @@ namespace Million.API.Controllers
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+
+        [HttpGet("whoami")]
+        public IActionResult WhoAmI()
+        {
+            var identity = User.Identity as ClaimsIdentity;
+            var roles = identity?.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value);
+
+            return Ok(new { User.Identity.Name, Roles = roles });
         }
     }
 }

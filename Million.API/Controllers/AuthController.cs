@@ -1,4 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.Data;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Million.Domain.Entities;
+using Million.Domain.Settings;
+using Million.Infrastructure.Security.Jwt;
 
 namespace Million.API.Controllers
 {
@@ -8,43 +14,36 @@ namespace Million.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration _configuration;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly JwtSettings _jwtSettings;
 
-        public AuthController(IConfiguration configuration)
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="userManager"></param>
+        /// <param name="jwtOptions"></param>
+        public AuthController(UserManager<ApplicationUser> userManager, IOptions<JwtSettings> jwtOptions)
         {
-            _configuration = configuration;
+            _userManager = userManager;
+            _jwtSettings = jwtOptions.Value;
         }
 
-        //[HttpPost("login")]
-        //public IActionResult Login([FromBody] LoginDto dto)
-        //{
-        //    // Simulación de validación de usuario (puedes conectar a DB o Identity)
-        //    if (dto.Username == "admin" && dto.Password == "1234")
-        //    {
-        //        var claims = new[]
-        //        {
-        //        new Claim(ClaimTypes.Name, dto.Username),
-        //        new Claim(ClaimTypes.Role, "Admin")
-        //    };
+        /// <summary>
+        /// Login endpoint to authenticate users and issue JWT tokens.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        {
+            var user = await _userManager.FindByNameAsync(request.Email);
+            if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password))
+                return Unauthorized("Invalid credentials");
 
-        //        var key = new SymmetricSecurityKey(
-        //            Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-        //        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var roles = await _userManager.GetRolesAsync(user);
+            var token = TokenGenerator.GenerateJwtToken(user, roles, _jwtSettings);
 
-        //        var token = new JwtSecurityToken(
-        //            issuer: _configuration["Jwt:Issuer"],
-        //            audience: _configuration["Jwt:Audience"],
-        //            claims: claims,
-        //            expires: DateTime.UtcNow.AddHours(2),
-        //            signingCredentials: creds);
-
-        //        return Ok(new
-        //        {
-        //            token = new JwtSecurityTokenHandler().WriteToken(token)
-        //        });
-        //    }
-
-        //    return Unauthorized("Credenciales inválidas");
-        //}
-
+            return Ok(new { token });
+        }
     }
 }
