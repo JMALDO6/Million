@@ -28,6 +28,9 @@ namespace Million.Infrastructure.Persistence.Configurations
                    .IsRequired()
                    .HasMaxLength(50);
 
+            builder.HasIndex(o => o.CodeInternal)
+                    .IsUnique();
+
             builder.Property(o => o.Year)
                    .IsRequired()
                    .HasMaxLength(4);

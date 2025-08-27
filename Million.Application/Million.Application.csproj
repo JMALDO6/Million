@@ -14,7 +14,6 @@
     <Folder Include="Features\Properties\Commands\AddPropertyImage\" />
     <Folder Include="Features\Properties\Commands\ChangePropertyPrice\" />
     <Folder Include="Features\Properties\Commands\UpdateProperty\" />
-    <Folder Include="Features\Properties\Queries\GetProperties\" />
   </ItemGroup>
 
   <ItemGroup>

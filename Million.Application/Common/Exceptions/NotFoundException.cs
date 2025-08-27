@@ -3,9 +3,7 @@
     /// <summary>
     /// Not found exception
     /// </summary>
-    public class NotFoundException : Exception
+    public class NotFoundException(string name, object key) : Exception($"'{name}' with key '{key}' was not found.")
     {
-        public NotFoundException(string name, object key)
-            : base($"'{name}' with key '{key}' was not found.") { }
     }
 }

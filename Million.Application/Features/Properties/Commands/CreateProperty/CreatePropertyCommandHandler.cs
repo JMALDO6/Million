@@ -1,6 +1,9 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Million.Application.Common.Exceptions;
 using Million.Application.Features.Properties.DTOs;
+using Million.Application.Features.Properties.Queries.GetProperties;
 using Million.Application.Interfaces.Repositories;
 using Million.Domain.Entities;
 
@@ -21,27 +24,43 @@ namespace Million.Application.Features.Properties.Commands.CreateProperty
 
         public async Task<PropertyDto> Handle(CreatePropertyCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Handling CreatePropertyCommand for property: {PropertyName}", request.Property.Name);
-            var dto = request.Property;
-
-            var property = new Property(dto.Name, dto.Address, dto.Price, dto.CodeInternal, dto.Year, dto.IdOwner);
-
-            await _repository.AddAsync(property);
-
-            _logger.LogInformation("Property created at {PropertyName} with ID {Id}", dto.Name, property.IdProperty);
-
-            var propertyDto = new PropertyDto
+            try
             {
-                PropertyId = property.IdProperty.ToString(),
-                Address = property.Address,
-                Name = property.Name,
-                CodeInternal = property.CodeInternal,
-                Price = property.Price,
-                Year = property.Year,
-                Owner = property.Owner.Name
-            };
+                _logger.LogInformation("Handling CreatePropertyCommand for property: {PropertyName}", request.Property.Name);
+                var dto = request.Property;
 
-            return propertyDto;
+                var exists = await _repository.ExistsAsync(new PropertyFilterDto { CodeInternal = dto.CodeInternal });
+                
+                if (exists)
+                {
+                    throw new ValidationException(new Dictionary<string, string[]>
+                    {
+                        { "CodeInternal", new[] { "A property with this internal code already exists." } }
+                    });
+                }
+
+                var property = new Property(dto.Name, dto.Address, dto.Price, dto.CodeInternal, dto.Year, dto.IdOwner);
+                await _repository.AddAsync(property);
+
+                _logger.LogInformation("Property created at {PropertyName} with ID {Id}", dto.Name, property.IdProperty);
+
+                var propertyDto = new PropertyDto
+                {
+                    PropertyId = property.IdProperty.ToString(),
+                    Address = property.Address,
+                    Name = property.Name,
+                    CodeInternal = property.CodeInternal,
+                    Price = property.Price,
+                    Year = property.Year,
+                    Owner = property.IdOwner
+                };
+
+                return propertyDto;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new DatabaseException("An error occurred while accessing the database.", ex);
+            }
         }
     }
 }

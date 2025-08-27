@@ -86,6 +86,18 @@ namespace Million.API.Middlewares
 
                 await context.Response.WriteAsync(JsonSerializer.Serialize(response));
             }
+            catch (DatabaseException ex)
+            {
+                _logger.LogError(ex, "Database error occurred.");
+                context.Response.ContentType = "application/json";
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                var response = new
+                {
+                    error = "A database error occurred.",
+                    traceId = context.TraceIdentifier
+                };
+                await context.Response.WriteAsync(JsonSerializer.Serialize(response));
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Unhandled exception occurred while processing request.");

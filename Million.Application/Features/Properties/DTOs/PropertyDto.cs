@@ -33,8 +33,8 @@
         public int Year { get; set; }
 
         /// <summary>
-        /// Name of the property owner.
+        /// ID of the owner of the property.
         /// </summary>
-        public required string Owner { get; set; }
+        public int Owner { get; set; }
     }
 }

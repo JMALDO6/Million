@@ -3,8 +3,7 @@
     /// <summary>
     /// Forbidden Access Exception
     /// </summary>
-    public class ForbiddenAccessException : Exception
+    public class ForbiddenAccessException(string message = "Access denied.") : Exception(message)
     {
-        public ForbiddenAccessException(string message = "Access denied.") : base(message) { }
     }
 }

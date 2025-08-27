@@ -1,4 +1,5 @@
-﻿using Million.Domain.Entities;
+﻿using Million.Application.Features.Properties.Queries.GetProperties;
+using Million.Domain.Entities;
 
 namespace Million.Application.Interfaces.Repositories
 {
@@ -27,5 +28,19 @@ namespace Million.Application.Interfaces.Repositories
         /// <param name="property"></param>
         /// <returns></returns>
         Task UpdateAsync(Property property);
+
+        /// <summary>
+        /// Gets a property by several filters.
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        Task<List<Property>> GetByFiltersAsync(PropertyFilterDto filter);
+        
+        /// <summary>
+        /// Checks if a property exists matching the given filters.
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        Task<bool> ExistsAsync(PropertyFilterDto filter);
     }
 }
