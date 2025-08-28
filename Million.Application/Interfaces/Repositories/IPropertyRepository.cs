@@ -20,7 +20,7 @@ namespace Million.Application.Interfaces.Repositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<Property?> GetByIdAsync(Guid id);
+        Task<Property?> GetByIdAsync(int id);
 
         /// <summary>
         /// Updates an existing property in the repository.

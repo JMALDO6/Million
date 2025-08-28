@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Million.API.Middlewares;
 using Million.Application.Common.Behaviors;
 using Million.Application.Features.Properties.Commands.AddPropertyImage;
+using Million.Application.Features.Properties.Commands.ChangePropertyPrice;
 using Million.Application.Features.Properties.Commands.CreateProperty;
 using Million.Application.Interfaces.Repositories;
 using Million.Domain.Entities;

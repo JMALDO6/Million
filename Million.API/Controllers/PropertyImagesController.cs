@@ -12,7 +12,7 @@ namespace Million.API.Controllers
     /// <param name="mediator"></param>
     /// <param name="logger"></param>
     [ApiController]
-    [Route("api/Property/{idProperty}/[controller]")]
+    [Route("api/Properties/{idProperty}/[controller]")]
     public class PropertyImagesController(IMediator mediator, ILogger<PropertyImagesController> logger) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;

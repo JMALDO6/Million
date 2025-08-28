@@ -82,7 +82,7 @@ namespace Million.Infrastructure.Persistence.Repositories
         }
 
         /// <inheritdoc/>
-        public async Task<Property?> GetByIdAsync(Guid id)
+        public async Task<Property?> GetByIdAsync(int id)
         {
             return await _context.Properties.FindAsync(id);
         }
