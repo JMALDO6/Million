@@ -1,4 +1,4 @@
-﻿using Million.Application.Features.Properties.Queries.GetProperties;
+﻿using Million.Application.Features.Properties.DTOs;
 using Million.Domain.Entities;
 
 namespace Million.Application.Interfaces.Repositories
@@ -34,7 +34,7 @@ namespace Million.Application.Interfaces.Repositories
         /// </summary>
         /// <param name="filter"></param>
         /// <returns></returns>
-        Task<List<Property>> GetByFiltersAsync(PropertyFilterDto filter);
+        Task<List<PropertyListItemDto>> GetByFiltersAsync(PropertyFilterDto filter);
         
         /// <summary>
         /// Checks if a property exists matching the given filters.

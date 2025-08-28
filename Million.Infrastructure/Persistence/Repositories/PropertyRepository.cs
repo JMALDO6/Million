@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Million.Application.Features.Properties.Queries.GetProperties;
+using Million.Application.Features.Properties.DTOs;
 using Million.Application.Interfaces.Repositories;
 using Million.Domain.Entities;
 
@@ -29,15 +29,24 @@ namespace Million.Infrastructure.Persistence.Repositories
         }
 
         /// <inheritdoc/>
-        public async Task<List<Property>> GetByFiltersAsync(PropertyFilterDto filter)
+        public async Task<List<PropertyListItemDto>> GetByFiltersAsync(PropertyFilterDto filter)
         {
-            var query = _context.Properties.AsQueryable();
+            var query = _context.Properties
+                                .AsNoTracking()
+                                .Include(p => p.Owner)
+                                .AsQueryable();
+
+            if (filter.IdProperty.HasValue)
+                query = query.Where(p => p.IdProperty == filter.IdProperty.Value);
+
+            if (!string.IsNullOrWhiteSpace(filter.Name))
+                query = query.Where(p => p.Name.Contains(filter.Name));
 
             if (!string.IsNullOrWhiteSpace(filter.Address))
                 query = query.Where(p => p.Address.Contains(filter.Address));
 
             if (!string.IsNullOrWhiteSpace(filter.CodeInternal))
-                query = query.Where(p => p.CodeInternal == filter.CodeInternal);
+                query = query.Where(p => p.CodeInternal.Contains(filter.CodeInternal));
 
             if (filter.MinPrice.HasValue)
                 query = query.Where(p => p.Price >= filter.MinPrice.Value);
@@ -48,10 +57,25 @@ namespace Million.Infrastructure.Persistence.Repositories
             if (filter.Year.HasValue)
                 query = query.Where(p => p.Year == filter.Year.Value);
 
+            if (!string.IsNullOrWhiteSpace(filter.OwnerName))
+                query = query.Where(p => p.Owner.Name.Contains(filter.OwnerName));
+
             if (filter.IdOwner.HasValue)
                 query = query.Where(p => p.IdOwner == filter.IdOwner.Value);
 
-            return await query.Skip((filter.Page - 1) * filter.PageSize)
+            var projected = query
+                .Select(p => new PropertyListItemDto
+                {
+                    IdProperty = p.IdProperty,
+                    Name = p.Name,
+                    Address = p.Address,
+                    Price = p.Price,
+                    CodeInternal = p.CodeInternal,
+                    Year = p.Year,
+                    OwnerName = p.Owner != null ? p.Owner.Name : "N/A"
+                });
+
+            return await projected.Skip((filter.Page - 1) * filter.PageSize)
                         .Take(filter.PageSize)
                         .ToListAsync();
         }

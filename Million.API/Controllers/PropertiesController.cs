@@ -5,6 +5,7 @@ using Million.Application.Features.Properties.Commands.ChangePropertyPrice;
 using Million.Application.Features.Properties.Commands.CreateProperty;
 using Million.Application.Features.Properties.Commands.UpdateProperty;
 using Million.Application.Features.Properties.DTOs;
+using Million.Application.Features.Properties.Queries.GetProperties;
 
 namespace Million.API.Controllers
 {
@@ -80,6 +81,24 @@ namespace Million.API.Controllers
             _logger.LogInformation("Property with ID: {PropertyId} updated successfully", propertyId);
 
             return CreatedAtAction(nameof(UpdateProperty), new { propertyDto }, new { propertyDto });
+        }
+
+        /// <summary>
+        /// Get properties with optional filters
+        /// </summary>
+        /// <param name="filters"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize(Roles = "Admin,Agent,User")]
+        [ProducesResponseType(typeof(PropertyDto), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetProperties([FromQuery] PropertyFilterDto filters)
+        {
+            _logger.LogInformation("Retrieving properties with filters: {@Filters}", filters);
+            var query = new GetPropertiesQuery(filters);
+            var result = await _mediator.Send(query);
+            _logger.LogInformation("Successfully retrieved properties");
+
+            return Ok(result);
         }
     }
 }
