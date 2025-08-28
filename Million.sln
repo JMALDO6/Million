@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36414.22 d17.14
+VisualStudioVersion = 17.14.36414.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Million.API", "Million.API\Million.API.csproj", "{3922E44F-0D40-4676-A60C-FBE433BBD88F}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Million.Infrastructure", "Million.Infrastructure\Million.Infrastructure.csproj", "{867A90EE-0DDA-40FE-9DF3-031AD2E89A0D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Million.TestUserCreator", "Million.TestUserCreator\Million.TestUserCreator.csproj", "{B66B4926-E780-42DD-AE11-52B6017FA5BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Million.Tests", "Million.API.Tests\Million.Tests.csproj", "{EB909C9A-18F8-4128-9F45-C50E628EE5EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{B66B4926-E780-42DD-AE11-52B6017FA5BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B66B4926-E780-42DD-AE11-52B6017FA5BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B66B4926-E780-42DD-AE11-52B6017FA5BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB909C9A-18F8-4128-9F45-C50E628EE5EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB909C9A-18F8-4128-9F45-C50E628EE5EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB909C9A-18F8-4128-9F45-C50E628EE5EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB909C9A-18F8-4128-9F45-C50E628EE5EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

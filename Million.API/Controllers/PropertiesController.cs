@@ -42,7 +42,7 @@ namespace Million.API.Controllers
             var propertyDto = await _mediator.Send(command);
             _logger.LogInformation("Property created with ID: {Id}", propertyDto);
 
-            return CreatedAtAction(nameof(Create), new { propertyDto }, new { propertyDto });
+            return CreatedAtAction(nameof(Create), new { propertyDto }, propertyDto);
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace Million.API.Controllers
             var propertyDto = await _mediator.Send(command);
             _logger.LogInformation("Property with ID: {PropertyId} updated successfully", propertyId);
 
-            return CreatedAtAction(nameof(UpdateProperty), new { propertyDto }, new { propertyDto });
+            return CreatedAtAction(nameof(UpdateProperty), new { propertyDto }, propertyDto);
         }
 
         /// <summary>

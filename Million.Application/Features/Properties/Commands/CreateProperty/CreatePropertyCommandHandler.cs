@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Million.Application.Common.Exceptions;
 using Million.Application.Features.Properties.DTOs;
-using Million.Application.Features.Properties.Queries.GetProperties;
 using Million.Application.Interfaces.Repositories;
 using Million.Domain.Entities;
 
@@ -46,7 +45,7 @@ namespace Million.Application.Features.Properties.Commands.CreateProperty
 
                 return new PropertyDto
                 {
-                    PropertyId = property.IdProperty.ToString(),
+                    PropertyId = property.IdProperty,
                     Address = property.Address,
                     Name = property.Name,
                     CodeInternal = property.CodeInternal,

@@ -15,12 +15,14 @@ namespace Million.Infrastructure.Persistence.Repositories
         private readonly ILogger<PropertyImageRepository> _logger = logger;
 
         /// <inheritdoc/>
-        public async Task AddAsync(PropertyImage image)
+        public async Task<PropertyImage> AddAsync(PropertyImage image)
         {
             _logger.LogInformation("Adding a new image to property with ID: {IdProperty}", image.IdProperty);
             await _context.PropertyImages.AddAsync(image);
             await _context.SaveChangesAsync();
             _logger.LogInformation("Image added with ID: {IdPropertyImage}", image.IdPropertyImage);
+            
+            return image;
         }
     }
 }

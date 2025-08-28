@@ -8,7 +8,7 @@
         /// <summary>
         /// Identifier of the property.
         /// </summary>
-        public required string PropertyId { get; set; }
+        public int PropertyId { get; set; }
 
         /// <summary>
         /// Address of the property.

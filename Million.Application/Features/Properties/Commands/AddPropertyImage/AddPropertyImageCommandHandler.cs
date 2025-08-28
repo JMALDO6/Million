@@ -45,14 +45,14 @@ namespace Million.Application.Features.Properties.Commands.AddPropertyImage
                     Enabled = true
                 };
 
-                await _repository.AddAsync(propertyImage);
+                var image = await _repository.AddAsync(propertyImage);
                 _logger.LogInformation("Image added to property ID {IdProperty} with Image ID {IdPropertyImage}", request.IdProperty, propertyImage.IdPropertyImage);
 
                 return new PropertyImageDto
                 {
-                    IdPropertyImage = propertyImage.IdPropertyImage,
-                    IdProperty = propertyImage.IdProperty,
-                    Enabled = propertyImage.Enabled
+                    IdPropertyImage = image.IdPropertyImage,
+                    IdProperty = image.IdProperty,
+                    Enabled = image.Enabled
                 };
             }
             catch (DbUpdateException ex)

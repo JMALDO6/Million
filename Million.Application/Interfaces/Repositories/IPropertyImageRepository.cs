@@ -12,6 +12,6 @@ namespace Million.Application.Interfaces.Repositories
         /// </summary>
         /// <param name="image"></param>
         /// <returns></returns>
-        Task AddAsync(PropertyImage image);
+        Task<PropertyImage> AddAsync(PropertyImage image);
     }
 }
