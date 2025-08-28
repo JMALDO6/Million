@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Million.Application.Common.Exceptions;
 using Million.Application.Interfaces.Repositories;
@@ -20,34 +21,41 @@ namespace Million.Application.Features.Properties.Commands.ChangePropertyPrice
 
         public async Task Handle(ChangePropertyPriceCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Changing price for property ID: {PropertyId} to new price: {NewPrice}", request.PropertyId, request.NewPrice);
-
-            var validator = new ChangePropertyPriceCommandValidator();
-            var result = validator.Validate(request);
-
-            if (!result.IsValid)
+            try
             {
-                var errors = result.Errors
-                    .GroupBy(e => e.PropertyName)
-                    .ToDictionary(
-                        g => g.Key,
-                        g => g.Select(e => e.ErrorMessage).ToArray()
-                    );
+                _logger.LogInformation("Changing price for property ID: {PropertyId} to new price: {NewPrice}", request.PropertyId, request.NewPrice);
 
-                _logger.LogWarning("Validation failed for ChangePropertyPriceCommand: {Errors}", errors);
-                throw new ValidationException(errors);
+                var validator = new ChangePropertyPriceCommandValidator();
+                var result = validator.Validate(request);
+
+                if (!result.IsValid)
+                {
+                    var errors = result.Errors
+                        .GroupBy(e => e.PropertyName)
+                        .ToDictionary(
+                            g => g.Key,
+                            g => g.Select(e => e.ErrorMessage).ToArray()
+                        );
+
+                    _logger.LogWarning("Validation failed for ChangePropertyPriceCommand: {Errors}", errors);
+                    throw new ValidationException(errors);
+                }
+
+                var property = await _repository.GetByIdAsync(request.PropertyId);
+                if (property == null)
+                {
+                    _logger.LogWarning("Property with ID: {PropertyId} not found", request.PropertyId);
+                    throw new NotFoundException(nameof(property), request.PropertyId);
+                }
+
+                property.Price = request.NewPrice;
+                await _repository.UpdateAsync(property);
+                _logger.LogInformation("Price updated successfully for property ID: {PropertyId}", request.PropertyId);
             }
-
-            var property = await _repository.GetByIdAsync(request.PropertyId);
-            if (property == null)
+            catch (DbUpdateException ex)
             {
-                _logger.LogWarning("Property with ID: {PropertyId} not found", request.PropertyId);
-                throw new NotFoundException(nameof(property), request.PropertyId);
+                throw new DatabaseException("An error occurred while accessing the database.", ex);
             }
-
-            property.Price = request.NewPrice;
-            await _repository.UpdateAsync(property);
-            _logger.LogInformation("Price updated successfully for property ID: {PropertyId}", request.PropertyId);
         }
     }
 }

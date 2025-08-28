@@ -7,8 +7,8 @@ using Microsoft.IdentityModel.Tokens;
 using Million.API.Middlewares;
 using Million.Application.Common.Behaviors;
 using Million.Application.Features.Properties.Commands.AddPropertyImage;
-using Million.Application.Features.Properties.Commands.ChangePropertyPrice;
 using Million.Application.Features.Properties.Commands.CreateProperty;
+using Million.Application.Features.Properties.Commands.UpdateProperty;
 using Million.Application.Interfaces.Repositories;
 using Million.Domain.Entities;
 using Million.Domain.Settings;
@@ -123,6 +123,7 @@ builder.Services.AddScoped<IPropertyImageRepository, PropertyImageRepository>();
 // Configure FluentValidation
 builder.Services.AddValidatorsFromAssembly(typeof(CreatePropertyCommandValidator).Assembly);
 builder.Services.AddValidatorsFromAssembly(typeof(AddPropertyImageCommandValidator).Assembly);
+builder.Services.AddValidatorsFromAssembly(typeof(UpdatePropertyCommandValidator).Assembly);
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
 var app = builder.Build();

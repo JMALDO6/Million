@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Million.Application.Features.Properties.Commands.ChangePropertyPrice;
 using Million.Application.Features.Properties.Commands.CreateProperty;
+using Million.Application.Features.Properties.Commands.UpdateProperty;
 using Million.Application.Features.Properties.DTOs;
 
 namespace Million.API.Controllers
@@ -45,20 +46,40 @@ namespace Million.API.Controllers
         /// Patch method to change the price of a property
         /// </summary>
         /// <param name="propertyId"></param>
-        /// <param name="dto"></param>
+        /// <param name="changePropertyPriceDto"></param>
         /// <returns></returns>
         [HttpPatch("{propertyId}/Price")]
         [Authorize(Roles = "Admin,Agent")]
         [ProducesResponseType(typeof(PropertyDto), StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> ChangePrice(int propertyId, [FromBody] ChangePropertyPriceDto dto)
+        public async Task<IActionResult> ChangePrice(int propertyId, [FromBody] ChangePropertyPriceDto changePropertyPriceDto)
         {
-            _logger.LogInformation("Changing price for property ID: {PropertyId} to new price: {NewPrice}", propertyId, dto.NewPrice);
-            var command = new ChangePropertyPriceCommand(propertyId, dto.NewPrice);
+            _logger.LogInformation("Changing price for property ID: {PropertyId} to new price: {NewPrice}", propertyId, changePropertyPriceDto.NewPrice);
+            var command = new ChangePropertyPriceCommand(propertyId, changePropertyPriceDto.NewPrice);
             await _mediator.Send(command);
             _logger.LogInformation("Price changed successfully for property ID: {PropertyId}", propertyId);
 
             return NoContent();
+        }
+
+        /// <summary>
+        /// Update an existing property
+        /// </summary>
+        /// <param name="propertyId"></param>
+        /// <param name="updatePropertyDto"></param>
+        /// <returns></returns>
+        [HttpPut("{propertyId}")]
+        [Authorize(Roles = "Admin,Agent")]
+        [ProducesResponseType(typeof(PropertyDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateProperty(int propertyId, [FromBody] UpdatePropertyDto updatePropertyDto)
+        {
+            _logger.LogInformation("Updating property with ID: {PropertyId}", propertyId);
+            var command = new UpdatePropertyCommand(propertyId, updatePropertyDto);
+            var propertyDto = await _mediator.Send(command);
+            _logger.LogInformation("Property with ID: {PropertyId} updated successfully", propertyId);
+
+            return CreatedAtAction(nameof(UpdateProperty), new { propertyDto }, new { propertyDto });
         }
     }
 }
