@@ -44,7 +44,7 @@ namespace Million.Application.Features.Properties.Commands.CreateProperty
 
                 _logger.LogInformation("Property created at {PropertyName} with ID {Id}", dto.Name, property.IdProperty);
 
-                var propertyDto = new PropertyDto
+                return new PropertyDto
                 {
                     PropertyId = property.IdProperty.ToString(),
                     Address = property.Address,
@@ -54,8 +54,6 @@ namespace Million.Application.Features.Properties.Commands.CreateProperty
                     Year = property.Year,
                     Owner = property.IdOwner
                 };
-
-                return propertyDto;
             }
             catch (DbUpdateException ex)
             {

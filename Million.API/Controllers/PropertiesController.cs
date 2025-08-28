@@ -14,7 +14,6 @@ namespace Million.API.Controllers
     /// </remarks>
     /// <param name="mediator"></param>
     /// <param name="logger"></param>
-    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class PropertiesController(IMediator mediator, ILogger<PropertiesController> logger) : ControllerBase
@@ -25,19 +24,20 @@ namespace Million.API.Controllers
         /// <summary>
         /// Method to create a new property
         /// </summary>
-        /// <param name="dto"></param>
+        /// <param name="createPropertyDto"></param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize(Roles = "Admin,Agent")]
         [ProducesResponseType(typeof(PropertyDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Create([FromBody] CreatePropertyDto dto)
+        public async Task<IActionResult> Create([FromBody] CreatePropertyDto createPropertyDto)
         {
-            _logger.LogInformation("Creating a new property with address: {Address}", dto.Address);
-            var command = new CreatePropertyCommand(dto);
-            var id = await _mediator.Send(command);
-            _logger.LogInformation("Property created with ID: {Id}", id);
+            _logger.LogInformation("Creating a new property with address: {Address}", createPropertyDto.Address);
+            var command = new CreatePropertyCommand(createPropertyDto);
+            var propertyDto = await _mediator.Send(command);
+            _logger.LogInformation("Property created with ID: {Id}", propertyDto);
 
-            return CreatedAtAction(nameof(Create), new { id }, new { id });
+            return CreatedAtAction(nameof(Create), new { propertyDto }, new { propertyDto });
         }
     }
 }

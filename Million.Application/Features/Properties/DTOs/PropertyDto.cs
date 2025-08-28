@@ -1,5 +1,8 @@
 ﻿namespace Million.Application.Features.Properties.DTOs
 {
+    /// <summary>
+    /// Property Data Transfer Object
+    /// </summary>
     public class PropertyDto
     {
         /// <summary>

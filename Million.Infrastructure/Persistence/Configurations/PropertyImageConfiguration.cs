@@ -14,8 +14,8 @@ namespace Million.Infrastructure.Persistence.Configurations
             builder.HasKey(pi => pi.IdPropertyImage);
 
             builder.Property(pi => pi.File)
-                   .IsRequired()
-                   .HasMaxLength(255);
+                   .HasColumnType("varbinary(max)")
+                    .IsRequired();
 
             builder.Property(pi => pi.Enabled)
                    .IsRequired();

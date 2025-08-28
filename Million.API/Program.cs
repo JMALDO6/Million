@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Million.API.Middlewares;
 using Million.Application.Common.Behaviors;
+using Million.Application.Features.Properties.Commands.AddPropertyImage;
 using Million.Application.Features.Properties.Commands.CreateProperty;
 using Million.Application.Interfaces.Repositories;
 using Million.Domain.Entities;
@@ -114,11 +115,14 @@ builder.Host.UseSerilog();
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(CreatePropertyCommand).Assembly));
 
+// Configure Repositories
 builder.Services.AddScoped<IPropertyRepository, PropertyRepository>();
+builder.Services.AddScoped<IPropertyImageRepository, PropertyImageRepository>();
 
+// Configure FluentValidation
 builder.Services.AddValidatorsFromAssembly(typeof(CreatePropertyCommandValidator).Assembly);
+builder.Services.AddValidatorsFromAssembly(typeof(AddPropertyImageCommandValidator).Assembly);
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-//builder.Services.AddValidatorsFromAssembly(typeof(CreatePropertyDtoValidator).Assembly);
 
 var app = builder.Build();
 

@@ -35,6 +35,15 @@ namespace Million.TestUserCreator
                     Role = "User",
                     FirstName = "Test",
                     LastName = "User"
+                },
+                new
+                {
+                    Username = "agentuser",
+                    Email = "agent@example.com",
+                    Password = "Agent1234!",
+                    Role = "Agent",
+                    FirstName = "Agent",
+                    LastName = "User"
                 }
             };
 
