@@ -9,26 +9,22 @@ using Million.Infrastructure.Security.Jwt;
 
 namespace Million.API.Controllers
 {
+    /// <summary>
+    /// Authentication controller to handle user login and JWT token issuance.
+    /// </summary>
+    /// <remarks>
+    /// Ctor
+    /// </remarks>
+    /// <param name="userManager"></param>
+    /// <param name="jwtOptions"></param>
+    /// <param name="logger"></param>
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthController : ControllerBase
+    public class AuthController(UserManager<ApplicationUser> userManager, IOptions<JwtSettings> jwtOptions, ILogger<AuthController> logger) : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly JwtSettings _jwtSettings;
-        private readonly ILogger<AuthController> _logger;
-
-        /// <summary>
-        /// Ctor
-        /// </summary>
-        /// <param name="userManager"></param>
-        /// <param name="jwtOptions"></param>
-        /// <param name="logger"></param>
-        public AuthController(UserManager<ApplicationUser> userManager, IOptions<JwtSettings> jwtOptions, ILogger<AuthController> logger)
-        {
-            _userManager = userManager;
-            _jwtSettings = jwtOptions.Value;
-            _logger = logger;
-        }
+        private readonly UserManager<ApplicationUser> _userManager = userManager;
+        private readonly JwtSettings _jwtSettings = jwtOptions.Value;
+        private readonly ILogger<AuthController> _logger = logger;
 
         /// <summary>
         /// Login endpoint to authenticate users and issue JWT tokens.

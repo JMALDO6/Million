@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Asp.Versioning;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Million.Application.Features.Properties.Commands.ChangePropertyPrice;
@@ -19,6 +20,7 @@ namespace Million.API.Controllers
     /// <param name="logger"></param>
     [ApiController]
     [Route("api/[controller]")]
+    [ApiVersion("1.0")]
     public class PropertiesController(IMediator mediator, ILogger<PropertiesController> logger) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
